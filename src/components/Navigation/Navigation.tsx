@@ -25,7 +25,6 @@ import {
   SecondaryButton,
   StickersButton,
 } from "./Navigation.styles";
-import { Stack } from "@mui/material";
 
 interface Props {
   children: React.ReactNode;
@@ -37,7 +36,7 @@ const primaryMenuItems = MenuItems.primary[0].items;
 const primaryMenuItemsList = primaryMenuItems.map((item) => {
   return item.title;
 });
-//remove the first item from the list
+//for the desktop view, remove the first item from the list (View All)
 primaryMenuItemsList.shift();
 
 export default function Navigation({ children }: Props) {
@@ -93,7 +92,7 @@ export default function Navigation({ children }: Props) {
     </Box>
   );
 
-  const dropdownMenu = (
+  const stickersMenu = (
     <Box
       sx={{
         display: "flex",
@@ -112,7 +111,7 @@ export default function Navigation({ children }: Props) {
         <Typography
           sx={{
             fontSize: "0.8rem",
-            fontWeight: 700,
+            fontWeight: 500,
             color: (theme) => theme.colors.blueLight,
             textTransform: "uppercase",
             padding: "10px",
@@ -183,7 +182,7 @@ export default function Navigation({ children }: Props) {
                     onClick={handleMenu}
                   >
                     Stickers
-                    {open && dropdownMenu}
+                    {open && stickersMenu}
                   </PrimaryButton>
                   <PrimaryButton endIcon={<ExpandMoreIcon />}>
                     Labels
@@ -259,10 +258,6 @@ export default function Navigation({ children }: Props) {
           {drawer}
         </Drawer>
       </Box>
-      {/* <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar />
-        {children}
-      </Box> */}
     </Box>
   );
 }
