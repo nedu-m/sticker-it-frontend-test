@@ -12,8 +12,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-
-import AdjustIcon from "@mui/icons-material/Adjust";
 import MenuItems from "../../menu.json";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
@@ -25,18 +23,34 @@ import {
   NavbarTypography,
   PrimaryButton,
   SecondaryButton,
+  StickersButton,
 } from "./Navigation.styles";
+import { Stack } from "@mui/material";
 
 interface Props {
   children: React.ReactNode;
 }
 
+const primaryMenuItems = MenuItems.primary[0].items;
+
+//list the title of the primary menu items
+const primaryMenuItemsList = primaryMenuItems.map((item) => {
+  return item.title;
+});
+//remove the first item from the list
+primaryMenuItemsList.shift();
+
 export default function Navigation({ children }: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const [open, setOpen] = React.useState(false);
+  const handleMenu = () => {
+    setOpen(!open);
+  };
+
   const drawerWidth = 270;
 
   const navItems = [
@@ -46,16 +60,6 @@ export default function Navigation({ children }: Props) {
     "Help me Choose",
     "Reorder",
   ];
-
-  const primaryMenuItems = MenuItems.primary;
-  const secondaryMenuItems = MenuItems.secondary;
-
-  //Access the primary menu items
-  const primaryMenu = primaryMenuItems[0];
-  const primaryMenuItemsList = primaryMenu.items;
-
-  console.log(primaryMenuItemsList);
-  console.log("primaryMenuItems", primaryMenu);
 
   const drawer = (
     <Box
@@ -89,6 +93,38 @@ export default function Navigation({ children }: Props) {
     </Box>
   );
 
+  const dropdownMenu = (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        gap: "18px",
+        top: "40px",
+        position: "absolute",
+        bgcolor: "white",
+        mt: 4,
+        borderRadius: 1,
+        border: "1px solid #aeebe1",
+        width: "max-content",
+      }}
+    >
+      {primaryMenuItemsList.map((item) => (
+        <Typography
+          sx={{
+            fontSize: "0.8rem",
+            fontWeight: 700,
+            color: (theme) => theme.colors.blueLight,
+            textTransform: "uppercase",
+            padding: "10px",
+          }}
+        >
+          <Divider orientation="vertical" flexItem />
+          {item}
+        </Typography>
+      ))}
+    </Box>
+  );
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
@@ -105,6 +141,7 @@ export default function Navigation({ children }: Props) {
             display: "flex",
             justifyContent: "space-evenly",
             gap: "1rem",
+            alignContent: "center",
           }}
         >
           <IconButton
@@ -112,7 +149,10 @@ export default function Navigation({ children }: Props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ display: { sm: "none" } }}
+            sx={{
+              display: { sm: "none" },
+              color: "grey.500",
+            }}
           >
             <MenuIcon />
           </IconButton>
@@ -138,8 +178,12 @@ export default function Navigation({ children }: Props) {
               {/* the primary menu items */}
               <NavbarTypography variant="h5">
                 <Box>
-                  <PrimaryButton endIcon={<ExpandMoreIcon />}>
+                  <PrimaryButton
+                    endIcon={<ExpandMoreIcon />}
+                    onClick={handleMenu}
+                  >
                     Stickers
+                    {open && dropdownMenu}
                   </PrimaryButton>
                   <PrimaryButton endIcon={<ExpandMoreIcon />}>
                     Labels
@@ -161,43 +205,15 @@ export default function Navigation({ children }: Props) {
                     fontSize: "0.8rem",
                   }}
                 >
-                  <SecondaryButton
-                    sx={{
-                      color: (theme) => theme.colors.greenDark,
-                      fontSize: "0.8rem",
-                    }}
-                    endIcon={<ExpandMoreIcon />}
-                  >
+                  <SecondaryButton endIcon={<ExpandMoreIcon />}>
                     Support
                   </SecondaryButton>
-                  <SecondaryButton
-                    sx={{
-                      color: (theme) => theme.colors.greenDark,
-                      fontSize: "0.8rem",
-                    }}
-                    endIcon={<ExpandMoreIcon />}
-                  >
+                  <SecondaryButton endIcon={<ExpandMoreIcon />}>
                     About
                   </SecondaryButton>
+                  <SecondaryButton endIcon={<PersonIcon />}></SecondaryButton>
+                  <SecondaryButton endIcon={<SearchIcon />}></SecondaryButton>
                   <SecondaryButton
-                    sx={{
-                      color: (theme) => theme.colors.greenDark,
-                      fontSize: "0.8rem",
-                    }}
-                    endIcon={<PersonIcon />}
-                  ></SecondaryButton>
-                  <SecondaryButton
-                    sx={{
-                      color: (theme) => theme.colors.greenDark,
-                      fontSize: "0.8rem",
-                    }}
-                    endIcon={<SearchIcon />}
-                  ></SecondaryButton>
-                  <SecondaryButton
-                    sx={{
-                      color: (theme) => theme.colors.greenDark,
-                      fontSize: "0.8rem",
-                    }}
                     endIcon={<ShoppingBagIcon />}
                   ></SecondaryButton>
                 </Box>
@@ -209,6 +225,7 @@ export default function Navigation({ children }: Props) {
           <Box
             sx={{
               display: { xs: "flex", sm: "none" },
+              pr: -3,
             }}
           >
             <NavbarTypography variant="h6" noWrap>
