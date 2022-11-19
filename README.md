@@ -62,6 +62,6 @@ So here's what I did:
 
 ## Suggestions for improvements
 
-* Restructure the menu.json file to make it easier to abstract the data and use it in the components
+* Restructure the menu.json file to make it easier to use  in the components
 
 * Work on the responsiveness of the menu for mid-sized screens
